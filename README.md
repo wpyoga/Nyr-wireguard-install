@@ -1,3 +1,5 @@
+This project was forked from [wireguard-install](https://github.com/Nyr/wireguard-install) and subsequently modularized. In order to build the main distributable script, the modular script files are merged using [merge-shell](https://github.com/wpyoga/merge-shell). You can use the `Makefile` to test the correctness of the merged script.
+
 ## wireguard-install
 WireGuard [road warrior](http://en.wikipedia.org/wiki/Road_warrior_%28computing%29) installer for Ubuntu, Debian, CentOS and Fedora.
 
