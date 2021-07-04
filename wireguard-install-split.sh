@@ -9,21 +9,15 @@
 . split-scripts/detect-os.sh
 
 # @MERGE
-. split-scripts/check-sanity.sh
+. split-scripts/check-requirements.sh
 
 # @MERGE
-. split-scripts/detect-os-2.sh
-
-# @MERGE
-. split-scripts/check-sanity-2.sh
-
-# @MERGE
-. split-scripts/utils-wireguard.sh
+. split-scripts/util-functions.sh
 
 if [[ ! -e /etc/wireguard/wg0.conf ]]; then
-# @MERGE t 1
-. split-scripts/nonexistent-wireguard.sh
+	# @MERGE
+	. split-scripts/nonexistent-wireguard.sh
 else
-# @MERGE t 1
-. split-scripts/existing-wireguard.sh
+	# @MERGE
+	. split-scripts/existing-wireguard.sh
 fi

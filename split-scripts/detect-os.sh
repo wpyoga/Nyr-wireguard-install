@@ -34,21 +34,3 @@ else
 Supported distributions are Ubuntu, Debian, CentOS, and Fedora."
 	exit
 fi
-
-if [[ "$os" == "ubuntu" && "$os_version" -lt 1804 ]]; then
-	echo "Ubuntu 18.04 or higher is required to use this installer.
-This version of Ubuntu is too old and unsupported."
-	exit
-fi
-
-if [[ "$os" == "debian" && "$os_version" -lt 10 ]]; then
-	echo "Debian 10 or higher is required to use this installer.
-This version of Debian is too old and unsupported."
-	exit
-fi
-
-if [[ "$os" == "centos" && "$os_version" -lt 7 ]]; then
-	echo "CentOS 7 or higher is required to use this installer.
-This version of CentOS is too old and unsupported."
-	exit
-fi

@@ -1,5 +1,6 @@
-	# Generate wg0.conf
-	cat << EOF > /etc/wireguard/wg0.conf
+# Generate wg0.conf
+# @HEREDOC
+cat << EOF > /etc/wireguard/wg0.conf
 # Do not alter the commented lines
 # They are used by wireguard-install
 # ENDPOINT $([[ -n "$public_ip" ]] && echo "$public_ip" || echo "$ip")
@@ -10,4 +11,5 @@ PrivateKey = $(wg genkey)
 ListenPort = $port
 
 EOF
-	chmod 600 /etc/wireguard/wg0.conf
+# @HEREDOC-END
+chmod 600 /etc/wireguard/wg0.conf

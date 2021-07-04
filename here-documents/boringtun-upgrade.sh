@@ -1,5 +1,6 @@
-		# Deploy upgrade script
-		cat << 'EOF' > /usr/local/sbin/boringtun-upgrade
+# Deploy upgrade script
+# @HEREDOC
+cat << 'EOF' > /usr/local/sbin/boringtun-upgrade
 #!/bin/bash
 latest=$(wget -qO- https://wg.nyr.be/1/latest 2>/dev/null || curl -sL https://wg.nyr.be/1/latest 2>/dev/null)
 # If server did not provide an appropriate response, exit
@@ -26,6 +27,7 @@ else
 	echo "$current is up to date"
 fi
 EOF
-		chmod +x /usr/local/sbin/boringtun-upgrade
-		# Add cron job to run the updater daily at a random time between 3:00 and 5:59
-		{ crontab -l 2>/dev/null; echo "$(( $RANDOM % 60 )) $(( $RANDOM % 3 + 3 )) * * * /usr/local/sbin/boringtun-upgrade &>/dev/null" ; } | crontab -
+# @HEREDOC-END
+chmod +x /usr/local/sbin/boringtun-upgrade
+# Add cron job to run the updater daily at a random time between 3:00 and 5:59
+{ crontab -l 2>/dev/null; echo "$(( $RANDOM % 60 )) $(( $RANDOM % 3 + 3 )) * * * /usr/local/sbin/boringtun-upgrade &>/dev/null" ; } | crontab -
