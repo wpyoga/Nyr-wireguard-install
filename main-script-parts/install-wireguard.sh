@@ -24,11 +24,11 @@ read -n1 -r -p "Press any key to continue..."
 # If not running inside a container, set up the WireGuard kernel module
 if [[ ! "$is_container" -eq 0 ]]; then
 	# @MERGE
-	. split-scripts/install-for-normal.sh
+	. split-scripts/install-normal-dependencies.sh
 # Else, we are inside a container and BoringTun needs to be used
 else
 	# @MERGE
-	. split-scripts/install-for-container.sh
+	. split-scripts/install-container-dependencies.sh
 fi
 # @MERGE
 . split-scripts/enable-firewalld.sh
