@@ -6,18 +6,38 @@
 
 
 # @MERGE
-. split-scripts/detect-os.sh
+. main-script-parts/detect-os.sh
 
 # @MERGE
-. split-scripts/check-requirements.sh
+. main-script-parts/check-requirements.sh
 
 # @MERGE
-. split-scripts/util-functions.sh
+. main-script-parts/util-functions.sh
 
 if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 	# @MERGE
-	. split-scripts/nonexistent-wireguard.sh
+	. main-script-parts/install-wireguard.sh
 else
 	# @MERGE
-	. split-scripts/existing-wireguard.sh
+	. main-script-parts/choose-action.sh
+	case "$option" in
+		1)
+			# @MERGE
+			. split-scripts/add-client.sh
+			exit
+		;;
+		2)
+			# @MERGE
+			. split-scripts/remove-client.sh
+			exit
+		;;
+		3)
+			# @MERGE
+			. split-scripts/uninstall-wireguard.sh
+			exit
+		;;
+		4)
+			exit
+		;;
+	esac
 fi

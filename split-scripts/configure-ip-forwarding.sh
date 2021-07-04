@@ -34,13 +34,34 @@ else
 		iptables_path=$(command -v iptables-legacy)
 		ip6tables_path=$(command -v ip6tables-legacy)
 	fi
-	# @MERGE
-	. multi-line-strings/wg-iptables.service.sh
+	# @MULTILINE
+	echo "[Unit]
+Before=network.target
+[Service]
+Type=oneshot
+ExecStart=$iptables_path -t nat -A POSTROUTING -s 10.7.0.0/24 ! -d 10.7.0.0/24 -j SNAT --to $ip
+ExecStart=$iptables_path -I INPUT -p udp --dport $port -j ACCEPT
+ExecStart=$iptables_path -I FORWARD -s 10.7.0.0/24 -j ACCEPT
+ExecStart=$iptables_path -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+ExecStop=$iptables_path -t nat -D POSTROUTING -s 10.7.0.0/24 ! -d 10.7.0.0/24 -j SNAT --to $ip
+ExecStop=$iptables_path -D INPUT -p udp --dport $port -j ACCEPT
+ExecStop=$iptables_path -D FORWARD -s 10.7.0.0/24 -j ACCEPT
+ExecStop=$iptables_path -D FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT" > /etc/systemd/system/wg-iptables.service
+	# @MULTILINE-END
 	if [[ -n "$ip6" ]]; then
-		# @MERGE
-		. multi-line-strings/wg-iptables.service-ipv6.sh
+		# @MULTILINE
+		echo "ExecStart=$ip6tables_path -t nat -A POSTROUTING -s fddd:2c4:2c4:2c4::/64 ! -d fddd:2c4:2c4:2c4::/64 -j SNAT --to $ip6
+ExecStart=$ip6tables_path -I FORWARD -s fddd:2c4:2c4:2c4::/64 -j ACCEPT
+ExecStart=$ip6tables_path -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+ExecStop=$ip6tables_path -t nat -D POSTROUTING -s fddd:2c4:2c4:2c4::/64 ! -d fddd:2c4:2c4:2c4::/64 -j SNAT --to $ip6
+ExecStop=$ip6tables_path -D FORWARD -s fddd:2c4:2c4:2c4::/64 -j ACCEPT
+ExecStop=$ip6tables_path -D FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT" >> /etc/systemd/system/wg-iptables.service
+		# @MULTILINE-END
 	fi
-	# @MERGE
-	. multi-line-strings/wg-iptables.service-tail.sh
+	# @MULTILINE
+	echo "RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target" >> /etc/systemd/system/wg-iptables.service
+	# @MULTILINE-END
 	systemctl enable --now wg-iptables.service
 fi

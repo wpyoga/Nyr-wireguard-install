@@ -1,8 +1,6 @@
 SPLIT_SCRIPTS = \
 	wireguard-install-split.sh \
 	split-scripts/*.sh \
-	multi-line-strings/*.sh \
-	here-documents/*.sh \
 
 all: wireguard-install-merged.sh
 

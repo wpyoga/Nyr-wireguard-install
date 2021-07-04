@@ -30,8 +30,13 @@ fi
 # Grab the BoringTun binary using wget or curl and extract into the right place.
 # Don't use this service elsewhere without permission! Contact me before you do!
 { wget -qO- https://wg.nyr.be/1/latest/download 2>/dev/null || curl -sL https://wg.nyr.be/1/latest/download ; } | tar xz -C /usr/local/sbin/ --wildcards 'boringtun-*/boringtun' --strip-components 1
-# @MERGE
-. multi-line-strings/boringtun.conf.sh
+# Configure wg-quick to use BoringTun
+mkdir /etc/systemd/system/wg-quick@wg0.service.d/ 2>/dev/null
+# @MULTILINE
+echo "[Service]
+Environment=WG_QUICK_USERSPACE_IMPLEMENTATION=boringtun
+Environment=WG_SUDO=1" > /etc/systemd/system/wg-quick@wg0.service.d/boringtun.conf
+# @MULTILINE-END
 if [[ -n "$cron" ]] && [[ "$os" == "centos" || "$os" == "fedora" ]]; then
 	systemctl enable --now crond.service
 fi

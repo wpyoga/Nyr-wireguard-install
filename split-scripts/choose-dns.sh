@@ -1,0 +1,2 @@
+echo
+new_client_dns
